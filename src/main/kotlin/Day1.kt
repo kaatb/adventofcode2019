@@ -1,5 +1,3 @@
-package day1
-
 class Day1 {
 
     fun solvePart1(moduleMasses: List<String>): Int {
