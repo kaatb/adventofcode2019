@@ -2,6 +2,7 @@ import java.util.stream.Collectors.toList
 
 class Day2 {
 
+
     fun setupAndSolvePart1(intCodesAsString: String): Int {
         val intList = intCodesAsString.split(",").stream()
             .map { intcode -> intcode.toInt() }
@@ -11,24 +12,41 @@ class Day2 {
         return solvePart1(intList as ArrayList<Int>).get(0)
     }
 
-    tailrec fun solvePart1(intList: ArrayList<Int>, index: Int = 0): ArrayList<Int> =
-        when (intList.get(index)) {
+    fun setupAndSolvePart2(intCodesAsString: String): Int {
+        val intList = intCodesAsString.split(",").stream()
+            .map { intcode -> intcode.toInt() }
+            .collect(toList())
+        for (noun in 0 .. 100){
+            for (verb in 0 .. 100) {
+                val newList = intList.toMutableList()
+                newList.set(1, noun)
+                newList.set(2, verb)
+                if(solvePart1(newList as ArrayList<Int>).get(0) == 19690720){
+                    return 100 * noun + verb
+                }
+            }
+        }
+        throw IllegalStateException()
+    }
+
+    tailrec fun solvePart1(memory: ArrayList<Int>, instructionPointer: Int = 0): ArrayList<Int> =
+        when (memory.get(instructionPointer)) {
             1 -> {
-                doOperation(intList, index) { a, b -> a + b }
-                solvePart1(intList, index + 4)
+                doInstruction(memory, instructionPointer) { a, b -> a + b }
+                solvePart1(memory, instructionPointer + 4)
             }
             2 -> {
-                doOperation(intList, index) { a, b -> a * b }
-                solvePart1(intList, index + 4)
+                doInstruction(memory, instructionPointer) { a, b -> a * b }
+                solvePart1(memory, instructionPointer + 4)
             }
-            99 -> intList
+            99 -> memory
             else -> throw IllegalStateException();
         }
 
-    fun doOperation(intList: ArrayList<Int>, index: Int, operation: (a: Int, b: Int) -> Int) =
-        intList.set(
-            intList.get(index + 3),
-            operation(intList.get(intList.get(index + 1)), intList.get(intList.get(index + 2)))
+    fun doInstruction(memory: ArrayList<Int>, instructionPointer: Int, operation: (a: Int, b: Int) -> Int) =
+        memory.set(
+            memory.get(instructionPointer + 3),
+            operation(memory.get(memory.get(instructionPointer + 1)), memory.get(memory.get(instructionPointer + 2)))
         );
 
 }

@@ -13,9 +13,6 @@ class Day1 {
     private fun calculateFuelBasedOnMass(moduleMass: Int) = Math.floorDiv(moduleMass, 3) - 2
 
     private fun calculateRemainingMassUntilZero(fuelMass: Int): Int {
-        print(fuelMass)
-        println(" --> " + calculateFuelBasedOnMass(fuelMass));
-
         if (calculateFuelBasedOnMass(fuelMass) <= 0)
             return fuelMass;
         else
